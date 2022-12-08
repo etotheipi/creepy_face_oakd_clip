@@ -9,15 +9,18 @@ import requests
 # Costume ID server is on the local network.  
 API = 'http://192.168.0.239:8080/classify'
 
-def submit(image_file):
+def submit(image_file, post_url=API):
+    """
+    Submits the image as a base64-encoded string to the server via REST/HTTP POST
+    """
     with open(image_file, "rb") as f:
         im_bytes = f.read()        
         
-	# Base64-encode the image to send over REST/HTTP POST
+    # Base64-encode the image to send over REST/HTTP POST
     im_b64 = base64.b64encode(im_bytes).decode("utf8")
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
     payload = json.dumps({"image": im_b64})
-    response = requests.post(API, data=payload, headers=headers)
+    response = requests.post(post_url, data=payload, headers=headers)
     print(response)
     try:
         data = response.json()     

@@ -30,6 +30,11 @@ candidate_texts = []
 candidate_text_embeds = []
 
 def reload_costume_list():
+    """
+    Reloads the list of costumes from costumes.txt and recomputes all
+    the text embeddings from CLIP.  These are cached for quick compare
+    to image embeddings from a costume-id request.
+    """
     global costume_list
     global candidate_texts
     global candidate_text_embeds
@@ -47,6 +52,12 @@ def reload_costume_list():
     
     
 def generate_results_image(orig_img_obj, texts, scores):
+    """
+    Generates the matplotlib-based chart showing the submitted image and the
+    top five results with a horizontal bar chart.  This method returns the 
+    matplotlib-generated PNG file as a base64-encoded string, to be easily
+    passed back through the REST interface.
+    """
     print(type(orig_img_obj))
     if isinstance(orig_img_obj, str):
         orig_img_obj = np.asarray(Image.open(orig_img_obj))
@@ -85,6 +96,11 @@ def generate_results_image(orig_img_obj, texts, scores):
     
 
 def identify_trick_or_treater(pil_img, print_results=True):
+    """
+    Takes the PIL image submitted via REST and runs it through CLIP to get
+    the image embedding and find the text embedding with the closest cosine
+    similarity.  Returns a dictionary of results.
+    """
     global costume_list
     global candidate_texts
     global candidate_text_embeds
@@ -121,6 +137,10 @@ def identify_trick_or_treater(pil_img, print_results=True):
   
 @app.route("/reload", methods=['GET'])
 def reload():         
+    """
+    Doing a GET on this endpoint does a live-reload of the costume list
+    (which recomputes and caches the text embeddings for each)
+    """
     reload_costume_list()
     return {
         'status': "SUCCESS",
@@ -130,6 +150,9 @@ def reload():
     
 @app.route("/classify", methods=['POST'])
 def classify():         
+    """
+    The POST endpoint for costume identification submissions.  
+    """
     global costume_list
     global candidate_texts
     global candidate_text_embeds
@@ -162,6 +185,7 @@ def classify():
   
   
 def run_server_api():
+    # Default is to listen on all interfaces, port 8080
     app.run(host='0.0.0.0', port=8080)
   
   

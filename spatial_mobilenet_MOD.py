@@ -168,24 +168,23 @@ def play_sound_file(fn, vol=50):
     except Exception as err:
         print('Error playing sound file:', err)
 
-'''
-This method is ALL the logic for servo control, eye brightness, and the
-whole costume ID state machine.   It is run in a separate thread to avoid
-interfering with any of the DepthAI/OAK-D stuff. 
-
-This method has its own framerate which can differ from the OAK-D frame
-rate (which could be variable).  The original loop will update variables
-at its own framerate, and this method will use whatever the latest values
-it reads from that thread to move the servos, change eye brightness, and
-manage the state machine.  
-
-The primary motivation is to avoid any of this custom logic from blocking
-or tripping up the main OAK-D/mobilenet detection stuff.  It also allows
-the servo to keep moving towards the (last) closest face, even if the OAK-D
-processing slows down to a crawl for some reason.
-'''
-
 def thr_manage_servos():
+    '''
+    This method is ALL the logic for servo control, eye brightness, and the
+    whole costume ID state machine.   It is run in a separate thread to avoid
+    interfering with any of the DepthAI/OAK-D stuff. 
+
+    This method has its own framerate which can differ from the OAK-D frame
+    rate (which could be variable).  The original loop will update variables
+    at its own framerate, and this method will use whatever the latest values
+    it reads from that thread to move the servos, change eye brightness, and
+    manage the state machine.  
+
+    The primary motivation is to avoid any of this custom logic from blocking
+    or tripping up the main OAK-D/mobilenet detection stuff.  It also allows
+    the servo to keep moving towards the (last) closest face, even if the OAK-D
+    processing slows down to a crawl for some reason.
+    '''
     global GSTATE
     global cycle_counter
     global analysis_results
