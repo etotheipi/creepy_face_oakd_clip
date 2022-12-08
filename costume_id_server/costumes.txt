@@ -1,0 +1,28 @@
+pirate
+princess
+pumpkin
+ninja
+cat
+dog
+bee
+mouse
+bat
+batman
+superman
+ballerina
+astronaut
+farmer
+fireman
+vampire
+witch
+skeleton
+ghost
+owl
+transformer
+dinosaur
+police officer
+little red riding hood
+athlete
+reindeer
+moose
+
